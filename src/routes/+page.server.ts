@@ -6,7 +6,7 @@ const newContactSchema = z.object({
 	firstName: z.string().min(1),
 	lastName: z.string().min(1),
 	email: z.string().email(),
-	company: z.string().min(1)
+	telefoon: z.string().min(1)
 })
 
 export const load = async (event) => {
