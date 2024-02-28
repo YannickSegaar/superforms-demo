@@ -3,7 +3,7 @@
     import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte"
     import { z } from "zod"
     import type { PageData } from "./$types"
-	const airtableApiKey = import.meta.env.VITE_AIRTABLE_API_KEY;
+    const airtableApiKey = import.meta.env.VITE_AIRTABLE_API_KEY;
 
 
     export let data: PageData
@@ -37,7 +37,7 @@
                 const response = await fetch('https://api.airtable.com/v0/appiUhN3UTNOzb1v3/Svelte%20Contactform', {
                     method: 'POST',
                     headers: {
-						'Authorization': `Bearer ${airtableApiKey}`,
+                        'Authorization': `Bearer ${airtableApiKey}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(airtableData)

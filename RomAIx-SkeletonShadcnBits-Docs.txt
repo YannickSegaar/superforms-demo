@@ -1,0 +1,1864 @@
+SKELETON DOCS
+
+
+
+
+SKELETON LIBRARY
+	COMPONENT
+	TYPESCRIPT IMPORT
+	PAGE SOURCE
+	NOTES
+	Steppers
+https://www.skeleton.dev/components/steppers
+
+
+	import { Stepper, Step } from '@skeletonlabs/skeleton';
+	<script lang="ts">
+        import DocsShell from '$lib/layouts/DocsShell/DocsShell.svelte';
+        import { DocsFeature, type DocsShellSettings } from '$lib/layouts/DocsShell/types';
+        import DocsPreview from '$lib/components/DocsPreview/DocsPreview.svelte';
+        // Components
+        import { Stepper, Step, SlideToggle, CodeBlock } from '@skeletonlabs/skeleton';
+        // Sveld
+        import sveldStepper from '@skeletonlabs/skeleton/components/Stepper/Stepper.svelte?raw&sveld';
+        import sveldStep from '@skeletonlabs/skeleton/components/Stepper/Step.svelte?raw&sveld';
+
+
+        // Docs Shell
+        const settings: DocsShellSettings = {
+                feature: DocsFeature.Component,
+                name: 'Steppers',
+                description: 'Divide and present content in sequenced steps.',
+                imports: ['Stepper', 'Step'],
+                source: 'packages/skeleton/src/lib/components/Stepper',
+                components: [
+                        { label: 'Stepper', sveld: sveldStepper },
+                        {
+                                label: 'Step',
+                                sveld: sveldStep,
+                                overrideProps: [
+                                        'gap',
+                                        'stepTerm',
+                                        'justify',
+                                        'buttonBack',
+                                        'buttonBackLabel',
+                                        'buttonNext',
+                                        'buttonNextLabel',
+                                        'buttonComplete',
+                                        'buttonCompleteLabel'
+                                ]
+                        }
+                ],
+                transitionIn: 'fade',
+                transitionOut: 'fade'
+        };
+
+
+        // Local
+        let locked = true;
+
+
+        function onNextHandler(e: CustomEvent): void {
+                console.log('event:next', e.detail);
+        }
+        function onBackHandler(e: CustomEvent): void {
+                console.log('event:prev', e.detail);
+        }
+        function onStepHandler(e: CustomEvent): void {
+                console.log('event:step', e.detail);
+        }
+        function onCompleteHandler(e: CustomEvent): void {
+                console.log('event:complete', e.detail);
+                alert('Complete!');
+        }
+</script>
+
+
+<DocsShell {settings}>
+        <!-- Slot: Sandbox -->
+        <svelte:fragment slot="sandbox">
+                <DocsPreview>
+                        <svelte:fragment slot="preview">
+                                <div class="w-full card p-4 text-token">
+                                        <Stepper on:next={onNextHandler} on:back={onBackHandler} on:step={onStepHandler} on:complete={onCompleteHandler}>
+                                                <Step>
+                                                        <svelte:fragment slot="header">Get Started!</svelte:fragment>
+                                                        <p>This example Stepper will teach you how to use this component. Tap <u>next</u> to proceed to the next step.</p>
+                                                        <!-- <svelte:fragment slot="navigation"><button class="btn variant-ghost-error">Abort</button></svelte:fragment> -->
+                                                </Step>
+                                                <Step>
+                                                        <svelte:fragment slot="header">Going Back.</svelte:fragment>
+                                                        <p>
+                                                                The current step progress will be tracked at the top. Tap <u>back</u> to return to the previous step.
+                                                        </p>
+                                                </Step>
+                                                <Step {locked}>
+                                                        <svelte:fragment slot="header">A Locked Step.</svelte:fragment>
+                                                        <p>
+                                                                This Step component uses the <code class="code">locked</code> property to prevent progress. This is ideal for multi-step forms,
+                                                                such as registration. For now we'll simulate a successful validation condition using the toggle below.
+                                                        </p>
+                                                        <aside class="alert variant-ghost-warning">
+                                                                <div class="alert-message">
+                                                                        <p>This step is <u>{locked ? 'Locked' : 'Unlocked'}</u></p>
+                                                                </div>
+                                                                <div class="alert-actions">
+                                                                        <SlideToggle name="locked-state" bind:checked={locked} active="bg-warning-500" />
+                                                                </div>
+                                                        </aside>
+                                                </Step>
+                                                <Step>
+                                                        <svelte:fragment slot="header">Long Form Content.</svelte:fragment>
+                                                        <p>The steps will expand to fit content of any length.</p>
+                                                        <p>
+                                                                <!-- cspell:disable -->
+                                                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque vel expedita porro vero, saepe dicta repellendus facilis ab accusamus
+                                                                unde, tempora ut nobis eum. Veniam, architecto corrupti. Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque vel
+                                                                expedita porro vero, saepe dicta repellendus facilis ab accusamus unde, tempora ut nobis eum. Veniam, architecto corrupti. Lorem
+                                                                ipsum dolor sit amet consectetur adipisicing elit. Itaque vel expedita porro vero, saepe dicta repellendus facilis ab accusamus
+                                                                unde, tempora ut nobis eum. Veniam, architecto corrupti. Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque vel
+                                                                expedita porro vero, saepe dicta repellendus facilis ab accusamus unde, tempora ut nobis eum. Veniam, architecto corrupti. Lorem
+                                                                ipsum dolor sit amet consectetur adipisicing elit. Itaque vel expedita porro vero, saepe dicta repellendus facilis ab accusamus
+                                                                unde, tempora ut nobis eum. Veniam, architecto corrupti.
+                                                                <!-- cspell:enable -->
+                                                        </p>
+                                                </Step>
+                                                <Step>
+                                                        <svelte:fragment slot="header">Almost Done.</svelte:fragment>
+                                                        <p>
+                                                                A Complete button will appear on the last step. When the step is unlocked and the button pressed, an <code class="code"
+                                                                        >on:complete</code
+                                                                > event will be fired. You can use this trigger to submit form data to a server.
+                                                        </p>
+                                                </Step>
+                                        </Stepper>
+                                </div>
+                        </svelte:fragment>
+                        <svelte:fragment slot="source">
+                                <CodeBlock
+                                        language="html"
+                                        code={`
+<Stepper>
+        <Step>
+                <svelte:fragment slot="header">(header)</svelte:fragment>
+                (content)
+        </Step>
+        <Step>
+                <svelte:fragment slot="header">(header)</svelte:fragment>
+                (content)
+        </Step>
+        <!-- ... -->
+</Stepper>
+                        `}
+                                />
+                        </svelte:fragment>
+                </DocsPreview>
+        </svelte:fragment>
+
+
+        <!-- Slot: Usage -->
+        <svelte:fragment slot="usage">
+                <p>
+                        Create a set of Steps within the Stepper, then use the <code class="code">on:complete</code> event to detect when all steps are
+                        complete. Since horizontal space may be limited on small screens, we recommend no more than <em>five</em> steps at max.
+                </p>
+                <!-- Event Handlers -->
+                <section class="space-y-4">
+                        <h2 class="h2">Event Handlers</h2>
+                        <h3 class="h3">Complete Event</h3>
+                        <CodeBlock language="ts" code={`function onCompleteHandler(e: Event): void { console.log('event:complete', e); }`} />
+                        <CodeBlock language="html" code={`<Stepper on:complete={onCompleteHandler}>...</Stepper>`} />
+                        <h3 class="h3">Next, Step and Previous</h3>
+                        <p>Events are fired when the next or previous steps are pressed, step fires for both cases.</p>
+                        <CodeBlock
+                                language="ts"
+                                code={`function onStepHandler(e: {detail: {state: {current: number, total: number}, step: number}}): void {
+        console.log('event:step', e);
+}`}
+                        />
+                        <CodeBlock language="html" code={`<Stepper on:next={onNextHandler} on:step={onStepHandler} on:back={onBackHandler}>...</Stepper>`} />
+                        <blockquote class="blockquote">
+                                TIP: <code class="code">e.detail.state.current</code> contains the step shown to the user after navigation,
+                                <code class="code">e.detail.step</code> contains the step where navigation occurred.
+                        </blockquote>
+                </section>
+                <!-- Locked State -->
+                <section class="space-y-4">
+                        <h2 class="h2">Locked State</h2>
+                        <p>
+                                Each Step can have a <code class="code">locked</code> property set, when set to <em>TRUE</em> this locks progression for that step. For
+                                example, you can lock a step until a form within it becomes valid.
+                        </p>
+                        <CodeBlock language="ts" code={`let lockedState: boolean = true;`} />
+                        <CodeBlock language="html" code={`<Step locked={lockedState}>...</Step>`} />
+                </section>
+                <!-- Step Term -->
+                <section class="space-y-4">
+                        <h2 class="h2">Step Term</h2>
+                        <p>
+                                Use the <code class="code">stepTerm</code> property to override text shown in the animated section at the top of the Stepper, which is
+                                useful if you need i18n support for other languages.
+                        </p>
+                        <CodeBlock
+                                language="html"
+                                code={`
+<!-- German: Schritt 1, Schritt 2, ... This will override the stepTerm in the Step Counter -->
+<Stepper stepTerm="Schritt">
+        <!-- French: Étape 1, Étape 2, ... -->
+        <Step stepTerm='Étape'>...</Step>
+        <!-- Spanish: Paso 1, Paso 2, ... -->
+        <Step stepTerm='Paso'>...</Step>
+</Stepper>
+                        `}
+                        />
+                        <p>
+                                This can be overwritten per each Step as well, which updates the <em>default</em> and <em>header</em> slot placeholder text.
+                        </p>
+                </section>
+                <!-- Navigation Slot -->
+                <section class="space-y-4">
+                        <h2 class="h2">Navigation Slot</h2>
+                        <!-- prettier-ignore -->
+                        <p>
+                                You may override the contents of the disabled Back button in the <u>first step</u> by supplying a <code class="code">navigation</code> slot. Use this to supply a message or implement a custom action. This is not supported for step two and forward.
+                        </p>
+                        <CodeBlock
+                                language="html"
+                                code={`
+<Step>
+        <p>(content)</p>
+        <svelte:fragment slot="navigation">
+                <button class="btn variant-ghost-error" on:click={triggerAbort}>Abort</button>
+        </svelte:fragment>
+</Step>
+                        `}
+                        />
+                </section>
+        </svelte:fragment>
+</DocsShell>
+
+
+	  
+
+	App Shell
+https://www.skeleton.dev/components/app-shell
+
+
+	import { AppShell } from '@skeletonlabs/skeleton';
+	<script lang="ts">
+        // Docs
+        import DocsShell from '$lib/layouts/DocsShell/DocsShell.svelte';
+        import { DocsFeature, type DocsShellSettings } from '$lib/layouts/DocsShell/types';
+        import DocsPreview from '$lib/components/DocsPreview/DocsPreview.svelte';
+        // Components
+        import { AppShell, CodeBlock } from '@skeletonlabs/skeleton';
+        // Sveld
+        import sveldAppShell from '@skeletonlabs/skeleton/components/AppShell/AppShell.svelte?raw&sveld';
+
+
+        // Docs Shell
+        const settings: DocsShellSettings = {
+                feature: DocsFeature.Component,
+                name: 'App Shell',
+                description: 'Responsive shell for controlling application layout.',
+                imports: ['AppShell'],
+                source: 'packages/skeleton/src/lib/components/AppShell',
+                components: [{ sveld: sveldAppShell }]
+        };
+
+
+        // Local
+        let state = {
+                header: true,
+                pageHeader: false,
+                sidebarLeft: true,
+                sidebarRight: false,
+                pageFooter: true,
+                footer: false
+        };
+
+
+        function toggle(key: keyof typeof state): void {
+                state[key] = !state[key];
+        }
+</script>
+
+
+<DocsShell {settings}>
+        <!-- Slot: Sandbox -->
+        <svelte:fragment slot="sandbox">
+                <div class="space-y-2">
+                        <DocsPreview regionPreview="h-[280px]">
+                                <svelte:fragment slot="lead">
+                                        <p class="w-full text-center">The shaded regions represent the portion of the page that scrolls vertically.</p>
+                                </svelte:fragment>
+                                <svelte:fragment slot="preview">
+                                        <AppShell
+                                                class="card h-full p-1"
+                                                slotSidebarLeft="grid grid-cols-1"
+                                                slotSidebarRight="grid grid-cols-1"
+                                                slotPageContent="grid grid-cols-1"
+                                        >
+                                                <svelte:fragment slot="header">
+                                                        {#if state.header}
+                                                                <div class="card variant-soft p-2 m-0.5 flex justify-center items-center overflow-hidden text-xs">header</div>
+                                                        {/if}
+                                                </svelte:fragment>
+                                                <svelte:fragment slot="sidebarLeft">
+                                                        {#if state.sidebarLeft}
+                                                                <div class="card variant-soft p-2 m-0.5 flex justify-center items-center overflow-hidden text-xs">sidebarLeft</div>
+                                                        {/if}
+                                                </svelte:fragment>
+                                                <svelte:fragment slot="sidebarRight">
+                                                        {#if state.sidebarRight}
+                                                                <div class="card variant-soft p-2 m-0.5 flex justify-center items-center overflow-hidden text-xs">sidebarRight</div>
+                                                        {/if}
+                                                </svelte:fragment>
+                                                <svelte:fragment slot="pageHeader">
+                                                        {#if state.pageHeader}
+                                                                <div class="card variant-soft-primary p-2 m-0.5 flex justify-center items-center overflow-hidden text-xs">pageHeader</div>
+                                                        {/if}
+                                                </svelte:fragment>
+                                                <svelte:fragment slot="pageFooter">
+                                                        {#if state.pageFooter}
+                                                                <div class="card variant-soft-primary p-2 m-0.5 flex justify-center items-center overflow-hidden text-xs">pageFooter</div>
+                                                        {/if}
+                                                </svelte:fragment>
+                                                <!-- --- -->
+                                                <div class="card variant-soft-primary p-2 m-0.5 flex justify-center items-center overflow-hidden text-xs">
+                                                        {'<slot />'}
+                                                </div>
+                                                <!-- --- -->
+                                                <svelte:fragment slot="footer">
+                                                        {#if state.footer}
+                                                                <div class="card variant-soft p-2 m-0.5 flex justify-center items-center overflow-hidden text-xs">footer</div>
+                                                        {/if}
+                                                </svelte:fragment>
+                                        </AppShell>
+                                </svelte:fragment>
+                                <svelte:fragment slot="source">
+                                        <CodeBlock
+                                                language="html"
+                                                code={`
+<AppShell>
+        ${state.header ? '<svelte:fragment slot="header">Header</svelte:fragment>' : '<!-- (header) -->'}
+        ${state.sidebarLeft ? '<svelte:fragment slot="sidebarLeft">Sidebar Left</svelte:fragment>' : '<!-- (sidebarLeft) -->'}
+        ${state.sidebarRight ? '<svelte:fragment slot="sidebarRight">Sidebar Right</svelte:fragment>' : '<!-- (sidebarRight) -->'}
+        ${state.pageHeader ? '<svelte:fragment slot="pageHeader">Page Header</svelte:fragment>' : '<!-- (pageHeader) -->'}
+        <!-- Router Slot -->
+        <slot />
+        <!-- ---- / ---- -->
+        ${state.pageFooter ? '<svelte:fragment slot="pageFooter">Page Footer</svelte:fragment>' : '<!-- (pageFooter) -->'}
+        ${state.footer ? '<svelte:fragment slot="footer">Footer</svelte:fragment>' : '<!-- (footer) -->'}
+</AppShell>`}
+                                        />
+                                </svelte:fragment>
+                        </DocsPreview>
+                        <!-- prettier-ignore -->
+                        <div class="card p-4 mx-auto grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-6 gap-4">
+                                <button class="btn {state.header ? 'variant-filled' : 'variant-soft'}" on:click={() => { toggle('header'); }}>
+                                        header
+                                </button>
+                                        <button class="btn {state.sidebarLeft ? 'variant-filled' : 'variant-soft'}" on:click={() => { toggle('sidebarLeft'); }}>
+                                        sidebarLeft
+                                </button>
+                                        <button class="btn {state.sidebarRight ? 'variant-filled' : 'variant-soft'}" on:click={() => { toggle('sidebarRight'); }}>
+                                        sidebarRight
+                                </button>
+                                        <button class="btn {state.pageHeader ? 'variant-filled' : 'variant-soft'}" on:click={() => { toggle('pageHeader'); }}>
+                                        pageHeader
+                                </button>
+                                        <button class="btn {state.pageFooter ? 'variant-filled' : 'variant-soft'}" on:click={() => { toggle('pageFooter'); }}>
+                                        pageFooter
+                                </button>
+                                        <button class="btn {state.footer ? 'variant-filled' : 'variant-soft'}" on:click={() => { toggle('footer'); }}>
+                                        footer
+                                </button>
+                        </div>
+                </div>
+        </svelte:fragment>
+
+
+        <!-- Slot: Usage -->
+        <svelte:fragment slot="usage">
+                <section class="space-y-4">
+                        <p>
+                                Implement the App Shell in your app's root layout in <code class="code">/src/routes/+layout.svelte</code>. Slot order does not
+                                matter.
+                        </p>
+                </section>
+                <section class="space-y-4">
+                        <div class="flex items-center space-x-2">
+                                <h2 class="h2">Prerequisites</h2>
+                                <span class="badge variant-filled-warning">Required</span>
+                        </div>
+                        <!-- prettier-ignore -->
+                        <p>
+                                The App Shell will need to expand to fill all available space within your app's <em>body</em> tag. Open <code class="code">/src/app.html</code> and add the following classes.
+                                <a class="anchor" href="https://github.com/sveltejs/kit/issues/6244#issuecomment-1226600661" target="_blank" rel="noreferrer">This wrapping element is required</a> and the style of <code class="code">display: contents</code> should remain.
+                        </p>
+                        <CodeBlock
+                                language="html"
+                                code={`<body>\n\t<div style="display: contents" class="h-full overflow-hidden">%sveltekit.body%</div>\n</body>`.trim()}
+                        />
+                        <p>
+                                Then update your global stylesheet with the following. This will disable overflow for <em>html</em> and <em>body</em> tags to prevent
+                                duplicate scroll bars.
+                        </p>
+                        <CodeBlock language="css" code={`html, body { @apply h-full overflow-hidden; }`} />
+                </section>
+                <section class="space-y-4">
+                        <h2 class="h2">Using an App Bar</h2>
+                        <p>
+                                If you wish for your <a class="anchor" href="/components/app-bar">App Bar</a> component to remain fixed at the top of the page,
+                                embed it into the top-most <code class="code">header</code> slot.
+                        </p>
+                        <CodeBlock
+                                language="html"
+                                code={`
+<AppShell>
+        <svelte:fragment slot="header">
+                <AppBar>Skeleton</AppBar>
+        </svelte:fragment>
+        <!-- ... -->
+</AppShell>`}
+                        />
+                        <p>If you wish for your App Bar to scroll with the page, insert it into the <code class="code">pageHeader</code> slot.</p>
+                        <CodeBlock
+                                language="html"
+                                code={`
+<AppShell>
+        <svelte:fragment slot="pageHeader">
+                <AppBar>Skeleton</AppBar>
+        </svelte:fragment>
+        <!-- ... -->
+</AppShell>`}
+                        />
+                        <p>If you wish to have a sticky <code class="code">pageHeader</code>, apply the following App Shell prop styles.</p>
+                        <CodeBlock language="html" code={`<AppShell regionPage="relative" slotPageHeader="sticky top-0 z-10">...</AppShell>`} />
+                </section>
+                <section class="space-y-4">
+                        <h2 class="h2">Responsive Sidebars</h2>
+                        <p>
+                                Sidebars have a default width of <code class="code">auto</code>. This means they will automatically collapse when their contents are
+                                <em>empty</em>
+                                or
+                                <em>hidden</em>. Use this to remove the sidebar with CSS media queries via
+                                <a class="anchor" href="https://tailwindcss.com/docs/responsive-design" target="_blank" rel="noreferrer"
+                                        >Tailwind's responsive breakpoints</a
+                                >.
+                        </p>
+                        <CodeBlock
+                                language="html"
+                                code={`
+<AppShell>
+        <svelte:fragment slot="sidebarLeft">
+                <!-- Hidden below Tailwind's large breakpoint -->
+                <div id="sidebar-left" class="hidden lg:block">Sidebar</div>
+        </svelte:fragment>
+</AppShell>`}
+                        />
+                        <aside class="alert variant-ghost-warning">
+                                <i class="fa-solid fa-lightbulb text-2xl" />
+                                <div class="alert-message">Consider hiding your sidebar for smaller screens and replace it with a Drawer.</div>
+                                <div class="alert-actions">
+                                        <a href="/blog/how-to-implement-a-responsive-sidebar-drawer" target="_blank" rel="noreferrer" class="btn variant-filled">
+                                                View Tutorial
+                                        </a>
+                                </div>
+                        </aside>
+                </section>
+                <section class="space-y-4">
+                        <h2 class="h2">Scroll to Top on Navigation</h2>
+                        <p>
+                                If you wish to have the App Shell page region auto-scroll to the top when navigating, add the following to your root layout in <code
+                                        class="code">/src/routes/+layout.svelte</code
+                                >.
+                        </p>
+                        <CodeBlock
+                                language="ts"
+                                code={`
+import type { AfterNavigate } from '@sveltejs/kit';
+import { afterNavigate } from '$app/navigation';
+
+
+afterNavigate((params: AfterNavigate) => {
+    const isNewPage = params.from?.url.pathname !== params.to?.url.pathname;
+    const elemPage = document.querySelector('#page');
+    if (isNewPage && elemPage !== null) {
+        elemPage.scrollTop = 0;
+    }
+});
+`}
+                        />
+                </section>
+                <section class="space-y-4">
+                        <h2 class="h2">Tracking Scroll Position</h2>
+                        <p>Use the <code class="code">on:scroll</code> event to detect when the page region is scrolled vertically.</p>
+                        <CodeBlock
+                                language="ts"
+                                code={`
+import type { ComponentEvents } from 'svelte';
+
+
+function scrollHandler(event: ComponentEvents<AppShell>['scroll']) {
+        console.log(event.currentTarget.scrollTop);
+}
+`}
+                        />
+                        <CodeBlock language="html" code={`<AppShell ... on:scroll={scrollHandler}>`} />
+                </section>
+                <section class="space-y-4">
+                        <h2 class="h2">Scrollbar Gutter</h2>
+                        <!-- prettier-ignore -->
+                        <p>
+                                Use the <a class="anchor" href="https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter" target="_blank">scrollbar gutter</a> property to adjust how the page region scrollbar gutters are handled. View a <a class="anchor" href="https://www.youtube.com/shorts/mg49F9qUs38" target="_blank">quick demo video</a>.
+                        </p>
+                        <CodeBlock language="ts" code={`<AppShell scrollbarGutter="auto">...</AppShell>`} />
+                </section>
+                <section class="space-y-4">
+                        <h2 class="h2">Accessibility</h2>
+                        <p>
+                                Please be aware that the App Shell does not support window scoped scrolling. This may affect certain features, such as
+                                pull-to-refresh on mobile. In order to scroll the page region you first need to focus the page with either a touch or click. If you
+                                require window scoped scrolling we recommend you implement a custom layout in place of the App Shell.
+                        </p>
+                </section>
+        </svelte:fragment>
+</DocsShell>
+	  
+
+	
+
+	
+
+	
+
+	
+
+	
+
+SHADCN-SVELTE DOCS
+
+
+SHADCN-SVELTE LIBRARY
+	COMPONENT
+	INSTALLATION
+	PAGE SOURCE
+	NOTES
+	Checkbox Form
+https://www.shadcn-svelte.com/docs/components/checkbox
+
+
+	npx shadcn-svelte@latest add checkbox
+
+
+	<script lang="ts" context="module">
+  import { z } from "zod";
+  export const formSchema = z.object({
+    mobile: z.boolean().default(false)
+  });
+  export type FormSchema = typeof formSchema;
+</script>
+ 
+<script lang="ts">
+  import { browser } from "$app/environment";
+  import { page } from "$app/stores";
+  import * as Form from "$lib/components/ui/form";
+  import { Checkbox } from "$lib/components/ui/checkbox";
+  import SuperDebug, {
+    type SuperValidated,
+    type Infer,
+    superForm
+  } from "sveltekit-superforms";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import { toast } from "svelte-sonner";
+  let data: SuperValidated<Infer<FormSchema>> = $page.data.checkboxSingle;
+  export { data as form };
+ 
+  const form = superForm(data, {
+    validators: zodClient(formSchema),
+    onUpdated: ({ form: f }) => {
+      if (f.valid) {
+        toast.success("You submitted" + JSON.stringify(f.data, null, 2));
+      } else {
+        toast.error("Please fix the errors in the form.");
+      }
+    }
+  });
+ 
+  const { form: formData, enhance } = form;
+</script>
+ 
+<form action="?/checkboxSingle" method="POST" class="space-y-6" use:enhance>
+  <Form.Field
+    {form}
+    name="mobile"
+    class="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4"
+  >
+    <Form.Control let:attrs>
+      <Checkbox {...attrs} bind:checked={$formData.mobile} />
+      <div class="space-y-1 leading-none">
+        <Form.Label>Use different settings for my mobile devices</Form.Label>
+        <Form.Description>
+          You can manage your mobile notifications in the <a
+            href="/examples/forms">mobile settings</a
+          > page.
+        </Form.Description>
+      </div>
+      <input name={attrs.name} value={$formData.mobile} hidden />
+    </Form.Control>
+  </Form.Field>
+  <Form.Button>Submit</Form.Button>
+  {#if browser}
+    <SuperDebug data={$formData} />
+  {/if}
+</form>
+
+
+	  
+
+	Dropdown Menu - Radio Group
+https://www.shadcn-svelte.com/docs/components/dropdown-menu
+
+
+	npx shadcn-svelte@latest add dropdown-menu
+	<script lang="ts">
+  import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+  import { Button } from "$lib/components/ui/button";
+ 
+  let position = "bottom";
+</script>
+ 
+<DropdownMenu.Root>
+  <DropdownMenu.Trigger asChild let:builder>
+    <Button variant="outline" builders={[builder]}>Open</Button>
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content class="w-56">
+    <DropdownMenu.Label>Panel Position</DropdownMenu.Label>
+    <DropdownMenu.Separator />
+    <DropdownMenu.RadioGroup bind:value={position}>
+      <DropdownMenu.RadioItem value="top">Top</DropdownMenu.RadioItem>
+      <DropdownMenu.RadioItem value="bottom">Bottom</DropdownMenu.RadioItem>
+      <DropdownMenu.RadioItem value="right">Right</DropdownMenu.RadioItem>
+    </DropdownMenu.RadioGroup>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>
+	  
+
+	Hover Card
+https://www.shadcn-svelte.com/docs/components/hover-card
+
+
+	npx shadcn-svelte@latest add hover-card
+	<script lang="ts">
+  import Calendar from "svelte-radix/Calendar.svelte";
+  import * as Avatar from "$lib/components/ui/avatar";
+  import * as HoverCard from "$lib/components/ui/hover-card";
+</script>
+ 
+<HoverCard.Root>
+  <HoverCard.Trigger
+    href="https://github.com/sveltejs"
+    target="_blank"
+    rel="noreferrer noopener"
+    class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
+  >
+    @sveltejs
+  </HoverCard.Trigger>
+  <HoverCard.Content class="w-80">
+    <div class="flex justify-between space-x-4">
+      <Avatar.Root>
+        <Avatar.Image src="https://github.com/sveltejs.png" />
+        <Avatar.Fallback>SK</Avatar.Fallback>
+      </Avatar.Root>
+      <div class="space-y-1">
+        <h4 class="text-sm font-semibold">@sveltejs</h4>
+        <p class="text-sm">Cybernetically enhanced web apps.</p>
+        <div class="flex items-center pt-2">
+          <Calendar class="mr-2 h-4 w-4 opacity-70" />{" "}
+          <span class="text-xs text-muted-foreground">
+            Joined September 2022
+          </span>
+        </div>
+      </div>
+    </div>
+  </HoverCard.Content>
+</HoverCard.Root>
+
+
+	  
+
+YRS: Gebruik voor RomAIx watermark
+	Input - With Text & Label
+https://www.shadcn-svelte.com/docs/components/input
+
+
+	npx shadcn-svelte@latest add input
+	<script lang="ts">
+  import { Input } from "$lib/components/ui/input";
+  import { Label } from "$lib/components/ui/label";
+</script>
+ 
+<div class="grid w-full max-w-sm items-center gap-1.5">
+  <Label for="email-2">Email</Label>
+  <Input type="email" id="email-2" placeholder="Email" />
+  <p class="text-sm text-muted-foreground">Enter your email address.</p>
+</div>
+
+
+	  
+
+	Input - Form
+https://www.shadcn-svelte.com/docs/components/input
+	npx shadcn-svelte@latest add input
+	<script lang="ts" context="module">
+  import { z } from "zod";
+ 
+  export const formSchema = z.object({
+    username: z.string().min(2).max(50)
+  });
+  export type FormSchema = typeof formSchema;
+</script>
+ 
+<script lang="ts">
+  import { browser } from "$app/environment";
+  import * as Form from "$lib/components/ui/form";
+  import { Input } from "$lib/components/ui/input";
+  import SuperDebug, {
+    type SuperValidated,
+    type Infer,
+    superForm
+  } from "sveltekit-superforms";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import { toast } from "svelte-sonner";
+ 
+  let data: SuperValidated<Infer<FormSchema>>;
+  export { data as form };
+ 
+  const form = superForm(data, {
+    validators: zodClient(formSchema),
+    onUpdated: ({ form: f }) => {
+      if (f.valid) {
+        toast.success("You submitted" + JSON.stringify(f.data, null, 2));
+      } else {
+        toast.error("Please fix the errors in the form.");
+      }
+    }
+  });
+ 
+  const { form: formData, enhance } = form;
+</script>
+ 
+<form action="?/username" method="POST" class="w-2/3 space-y-6" use:enhance>
+  <Form.Field {form} name="username">
+    <Form.Control let:attrs>
+      <Form.Label>Username</Form.Label>
+      <Input {...attrs} bind:value={$formData.username} />
+    </Form.Control>
+    <Form.Description>This is your public display name.</Form.Description>
+    <Form.FieldErrors />
+  </Form.Field>
+ 
+  <Form.Button>Submit</Form.Button>
+  {#if browser}
+    <SuperDebug data={$formData} />
+  {/if}
+</form>
+
+
+	  
+
+YRS: Form does not load so unable to see preview
+	Menubar
+https://www.shadcn-svelte.com/docs/components/menubar
+
+
+	npx shadcn-svelte@latest add menubar
+	<script lang="ts">
+  import * as Menubar from "$lib/components/ui/menubar";
+ 
+  let bookmarks = false;
+  let fullUrls = true;
+ 
+  const profileRadioValue = "benoit";
+</script>
+ 
+<Menubar.Root>
+  <Menubar.Menu>
+    <Menubar.Trigger>File</Menubar.Trigger>
+    <Menubar.Content>
+      <Menubar.Item>
+        New Tab <Menubar.Shortcut>⌘T</Menubar.Shortcut>
+      </Menubar.Item>
+      <Menubar.Item>
+        New Window <Menubar.Shortcut>⌘N</Menubar.Shortcut>
+      </Menubar.Item>
+      <Menubar.Item>New Incognito Window</Menubar.Item>
+      <Menubar.Separator />
+      <Menubar.Sub>
+        <Menubar.SubTrigger>Share</Menubar.SubTrigger>
+        <Menubar.SubContent>
+          <Menubar.Item>Email link</Menubar.Item>
+          <Menubar.Item>Messages</Menubar.Item>
+          <Menubar.Item>Notes</Menubar.Item>
+        </Menubar.SubContent>
+      </Menubar.Sub>
+      <Menubar.Separator />
+      <Menubar.Item>
+        Print... <Menubar.Shortcut>⌘P</Menubar.Shortcut>
+      </Menubar.Item>
+    </Menubar.Content>
+  </Menubar.Menu>
+  <Menubar.Menu>
+    <Menubar.Trigger>Edit</Menubar.Trigger>
+    <Menubar.Content>
+      <Menubar.Item>
+        Undo <Menubar.Shortcut>⌘Z</Menubar.Shortcut>
+      </Menubar.Item>
+      <Menubar.Item>
+        Redo <Menubar.Shortcut>⇧⌘Z</Menubar.Shortcut>
+      </Menubar.Item>
+      <Menubar.Separator />
+      <Menubar.Sub>
+        <Menubar.SubTrigger>Find</Menubar.SubTrigger>
+        <Menubar.SubContent>
+          <Menubar.Item>Search the web</Menubar.Item>
+          <Menubar.Separator />
+          <Menubar.Item>Find...</Menubar.Item>
+          <Menubar.Item>Find Next</Menubar.Item>
+          <Menubar.Item>Find Previous</Menubar.Item>
+        </Menubar.SubContent>
+      </Menubar.Sub>
+      <Menubar.Separator />
+      <Menubar.Item>Cut</Menubar.Item>
+      <Menubar.Item>Copy</Menubar.Item>
+      <Menubar.Item>Paste</Menubar.Item>
+    </Menubar.Content>
+  </Menubar.Menu>
+  <Menubar.Menu>
+    <Menubar.Trigger>View</Menubar.Trigger>
+    <Menubar.Content>
+      <Menubar.CheckboxItem bind:checked={bookmarks}
+        >Always Show Bookmarks Bar</Menubar.CheckboxItem
+      >
+      <Menubar.CheckboxItem bind:checked={fullUrls}>
+        Always Show Full URLs
+      </Menubar.CheckboxItem>
+      <Menubar.Separator />
+      <Menubar.Item inset>
+        Reload <Menubar.Shortcut>⌘R</Menubar.Shortcut>
+      </Menubar.Item>
+      <Menubar.Item inset>
+        Force Reload <Menubar.Shortcut>⇧⌘R</Menubar.Shortcut>
+      </Menubar.Item>
+      <Menubar.Separator />
+      <Menubar.Item inset>Toggle Fullscreen</Menubar.Item>
+      <Menubar.Separator />
+      <Menubar.Item inset>Hide Sidebar</Menubar.Item>
+    </Menubar.Content>
+  </Menubar.Menu>
+  <Menubar.Menu>
+    <Menubar.Trigger>Profiles</Menubar.Trigger>
+    <Menubar.Content>
+      <Menubar.RadioGroup value={profileRadioValue}>
+        <Menubar.RadioItem value="andy">Andy</Menubar.RadioItem>
+        <Menubar.RadioItem value="benoit">Benoit</Menubar.RadioItem>
+        <Menubar.RadioItem value="Luis">Luis</Menubar.RadioItem>
+      </Menubar.RadioGroup>
+      <Menubar.Separator />
+      <Menubar.Item inset>Edit...</Menubar.Item>
+      <Menubar.Separator />
+      <Menubar.Item inset>Add Profile...</Menubar.Item>
+    </Menubar.Content>
+  </Menubar.Menu>
+</Menubar.Root>
+
+
+	  
+
+YRS: Use for creating drawing tool menubar?
+	Progress 
+https://www.shadcn-svelte.com/docs/components/progress
+
+
+	npx shadcn-svelte@latest add progress
+	<script lang="ts">
+  import { onMount } from "svelte";
+  import { Progress } from "$lib/components/ui/progress";
+ 
+  let value = 13;
+  onMount(() => {
+    const timer = setTimeout(() => (value = 66), 500);
+    return () => clearTimeout(timer);
+  });
+</script>
+ 
+<Progress {value} max={100} class="w-[60%]" />
+
+
+	  
+
+	Radio Group
+https://www.shadcn-svelte.com/docs/components/radio-group
+
+
+	npx shadcn-svelte@latest add radio-group
+	<script lang="ts" context="module">
+  import { z } from "zod";
+ 
+  export const formSchema = z.object({
+    type: z.enum(["all", "mentions", "none"], {
+      required_error: "You need to select a notification type"
+    })
+  });
+  export type FormSchema = typeof formSchema;
+</script>
+ 
+<script lang="ts">
+  import { browser } from "$app/environment";
+  import { page } from "$app/stores";
+  import * as Form from "$lib/components/ui/form";
+  import * as RadioGroup from "$lib/components/ui/radio-group";
+  import SuperDebug, {
+    type SuperValidated,
+    type Infer,
+    superForm
+  } from "sveltekit-superforms";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import { toast } from "svelte-sonner";
+ 
+  let data: SuperValidated<Infer<FormSchema>> = $page.data.radioGroup;
+  export { data as form };
+ 
+  const form = superForm(data, {
+    validators: zodClient(formSchema),
+    onUpdated: ({ form: f }) => {
+      if (f.valid) {
+        toast.success("You submitted" + JSON.stringify(f.data, null, 2));
+      } else {
+        toast.error("Please fix the errors in the form.");
+      }
+    }
+  });
+ 
+  const { form: formData, enhance } = form;
+</script>
+ 
+<form method="POST" action="?/radioGroup" class="w-2/3 space-y-6" use:enhance>
+  <Form.Fieldset {form} name="type" class="space-y-3">
+    <Form.Legend>Notify me about...</Form.Legend>
+    <RadioGroup.Root
+      bind:value={$formData.type}
+      class="flex flex-col space-y-1"
+    >
+      <div class="flex items-center space-x-3 space-y-0">
+        <Form.Control let:attrs>
+          <RadioGroup.Item value="all" {...attrs} />
+          <Form.Label class="font-normal">All new messages</Form.Label>
+        </Form.Control>
+      </div>
+      <div class="flex items-center space-x-3 space-y-0">
+        <Form.Control let:attrs>
+          <RadioGroup.Item value="mentions" {...attrs} />
+          <Form.Label class="font-normal"
+            >Direction messages and mentions</Form.Label
+          >
+        </Form.Control>
+      </div>
+      <div class="flex items-center space-x-3 space-y-0">
+        <Form.Control let:attrs>
+          <RadioGroup.Item value="none" {...attrs} />
+          <Form.Label class="font-normal">Nothing</Form.Label>
+        </Form.Control>
+      </div>
+      <RadioGroup.Input name="type" />
+    </RadioGroup.Root>
+    <Form.FieldErrors />
+  </Form.Fieldset>
+  <Form.Button>Submit</Form.Button>
+  {#if browser}
+    <SuperDebug data={$formData} />
+  {/if}
+</form>
+
+
+	  
+
+YRS: Dropdown & Radio combineren mogelijk?
+	Select
+https://www.shadcn-svelte.com/docs/components/select
+
+
+	npx shadcn-svelte@latest add select
+	<script lang="ts" context="module">
+  import { z } from "zod";
+ 
+  export const formSchema = z.object({
+    email: z
+      .string({ required_error: "Please select an email to display" })
+      .email()
+  });
+ 
+  export type FormSchema = typeof formSchema;
+</script>
+ 
+<script lang="ts">
+  import { browser } from "$app/environment";
+  import { page } from "$app/stores";
+  import * as Form from "$lib/components/ui/form";
+  import * as Select from "$lib/components/ui/select";
+  import SuperDebug, {
+    type SuperValidated,
+    type Infer,
+    superForm
+  } from "sveltekit-superforms";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import { toast } from "svelte-sonner";
+  let data: SuperValidated<Infer<FormSchema>> = $page.data.select;
+  export { data as form };
+ 
+  const form = superForm(data, {
+    validators: zodClient(formSchema),
+    onUpdated: ({ form: f }) => {
+      if (f.valid) {
+        toast.success("You submitted" + JSON.stringify(f.data, null, 2));
+      } else {
+        toast.error("Please fix the errors in the form.");
+      }
+    }
+  });
+ 
+  const { form: formData, enhance } = form;
+ 
+  $: selectedEmail = $formData.email
+    ? {
+        label: $formData.email,
+        value: $formData.email
+      }
+    : undefined;
+</script>
+ 
+<form method="POST" action="?/select" class="w-2/3 space-y-6" use:enhance>
+  <Form.Field {form} name="email">
+    <Form.Control let:attrs>
+      <Form.Label>Email</Form.Label>
+      <Select.Root
+        selected={selectedEmail}
+        onSelectedChange={(v) => {
+          v && ($formData.email = v.value);
+        }}
+      >
+        <Select.Trigger {...attrs}>
+          <Select.Value placeholder="Select a verified email to display" />
+        </Select.Trigger>
+        <Select.Content>
+          <Select.Item value="m@example.com" label="m@example.com" />
+          <Select.Item value="m@google.com" label="m@google.com" />
+          <Select.Item value="m@support.com" label="m@support.com" />
+        </Select.Content>
+      </Select.Root>
+      <input hidden bind:value={$formData.email} name={attrs.name} />
+    </Form.Control>
+    <Form.Description>
+      You can manage email address in your <a href="/examples/forms"
+        >email settings</a
+      >.
+    </Form.Description>
+    <Form.FieldErrors />
+  </Form.Field>
+  <Form.Button>Submit</Form.Button>
+  {#if browser}
+    <SuperDebug data={$formData} />
+  {/if}
+</form>
+
+
+	  
+
+YRS: Use for selecting dropdown menu. Check out the Bits UI Select Recipe in Formsnap docs.
+	Skeleton
+https://www.shadcn-svelte.com/docs/components/skeleton
+
+
+	npx shadcn-svelte@latest add skeleton
+	<script lang="ts">
+  import { Skeleton } from "$lib/components/ui/skeleton";
+</script>
+ 
+<div class="flex items-center space-x-4">
+  <Skeleton class="h-12 w-12 rounded-full" />
+  <div class="space-y-2">
+    <Skeleton class="h-4 w-[250px]" />
+    <Skeleton class="h-4 w-[200px]" />
+  </div>
+</div>
+
+
+	  
+
+YRS: Use to show a placeholder while content is loading, potentially useful as placeholder for solar potential values or for company logo while SVG logo is loading
+	Sonner - Toaster
+https://www.shadcn-svelte.com/docs/components/sonner
+
+
+	Setup theme support
+By default, Sonner will use the user's system preferences to determine whether to show the light or dark theme. To get around this, you can either pass in a custom theme prop to the component, or simply use mode-watcher which you can hardcode to dark or light mode should you wish.
+
+
+You can learn more about setting up Dark Mode support here.
+
+
+If you wish to opt out of Dark Mode support, you can uninstall mode-watcher and remove the theme prop from the component after installing via CLI, or manually install the component and don't include mode-watcher
+
+
+Run the following command:
+
+
+npx shadcn-svelte@latest add sonner
+
+
+Add the Toaster component
+
+
++layout.svelte
+<script lang="ts">
+  import { Toaster } from "$lib/components/ui/sonner";
+</script>
+ 
+<Toaster />
+ 
+<slot />
+
+
+
+
+	<script lang="ts">
+  import { toast } from "svelte-sonner";
+  import { Button } from "$lib/components/ui/button";
+</script>
+ 
+<Button
+  variant="outline"
+  on:click={() =>
+    toast("Event has been created", {
+      description: "Sunday, December 03, 2023 at 9:00 AM",
+      action: {
+        label: "Undo",
+        onClick: () => console.log("Undo")
+      }
+    })}
+>
+  Show Toast
+</Button>
+
+
+	  
+
+YRS: Popup toaster, potentially useful to show success message after form has successfully been submitted
+	Switch Form
+https://www.shadcn-svelte.com/docs/components/switch
+
+
+	npx shadcn-svelte@latest add switch
+	<script lang="ts" context="module">
+  import { z } from "zod";
+  export const formSchema = z.object({
+    marketing_emails: z.boolean().default(false).optional(),
+    security_emails: z.boolean().default(true)
+  });
+  export type FormSchema = typeof formSchema;
+</script>
+ 
+<script lang="ts">
+  import { browser } from "$app/environment";
+  import { page } from "$app/stores";
+  import * as Form from "$lib/components/ui/form";
+  import SuperDebug, {
+    type SuperValidated,
+    type Infer,
+    superForm
+  } from "sveltekit-superforms";
+  import { Switch } from "$lib/components/ui/switch";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import { toast } from "svelte-sonner";
+  let data: SuperValidated<Infer<FormSchema>> = $page.data.switch;
+  export { data as form };
+ 
+  const form = superForm(data, {
+    validators: zodClient(formSchema),
+    onUpdated: ({ form: f }) => {
+      if (f.valid) {
+        toast.success("You submitted" + JSON.stringify(f.data, null, 2));
+      } else {
+        toast.error("Please fix the errors in the form.");
+      }
+    }
+  });
+ 
+  const { form: formData, enhance } = form;
+</script>
+ 
+<form method="POST" action="?/switch" class="w-full space-y-6" use:enhance>
+  <fieldset>
+    <legend class="mb-4 text-lg font-medium"> Email Notifications </legend>
+    <div class="space-y-4">
+      <Form.Field
+        {form}
+        name="marketing_emails"
+        class="flex flex-row items-center justify-between rounded-lg border p-4"
+      >
+        <Form.Control let:attrs>
+          <div class="space-y-0.5">
+            <Form.Label>Marketing emails</Form.Label>
+            <Form.Description>
+              Receive emails about new products, features, and more.
+            </Form.Description>
+          </div>
+          <Switch
+            includeInput
+            {...attrs}
+            bind:checked={$formData.marketing_emails}
+          />
+        </Form.Control>
+      </Form.Field>
+      <Form.Field
+        {form}
+        name="security_emails"
+        class="flex flex-row items-center justify-between rounded-lg border p-4"
+      >
+        <Form.Control let:attrs>
+          <div class="space-y-0.5">
+            <Form.Label>Security emails</Form.Label>
+            <Form.Description>
+              Receive emails about your account security.
+            </Form.Description>
+          </div>
+          <Switch
+            {...attrs}
+            aria-readonly
+            disabled
+            includeInput
+            bind:checked={$formData.security_emails}
+          />
+        </Form.Control>
+      </Form.Field>
+    </div>
+  </fieldset>
+  <Form.Button>Submit</Form.Button>
+  {#if browser}
+    <SuperDebug data={$formData} />
+  {/if}
+</form>
+
+
+	  
+
+YRS: Potentially used to ask customers if they want to receive promotional emails or if they want to be contacted, etc.
+	Text Area With Text & Label
+https://www.shadcn-svelte.com/docs/components/textarea
+
+
+	npx shadcn-svelte@latest add textarea
+	<script lang="ts">
+  import { Label } from "$lib/components/ui/label";
+  import { Textarea } from "$lib/components/ui/textarea";
+</script>
+ 
+<div class="grid w-full gap-1.5">
+  <Label for="message-2">Your Message</Label>
+  <Textarea placeholder="Type your message here." id="message-2" />
+  <p class="text-sm text-muted-foreground">
+    Your message will be copied to the support team.
+  </p>
+</div>
+
+
+	  
+
+	Text Area With Button
+https://www.shadcn-svelte.com/docs/components/textarea
+
+
+	npx shadcn-svelte@latest add textarea
+	<script lang="ts">
+  import { Button } from "$lib/components/ui/button";
+  import { Textarea } from "$lib/components/ui/textarea";
+</script>
+ 
+<div class="grid w-full gap-2">
+  <Textarea placeholder="Type your message here." />
+  <Button>Send message</Button>
+</div>
+	  
+
+	Text Area Form
+https://www.shadcn-svelte.com/docs/components/textarea
+
+
+	npx shadcn-svelte@latest add textarea
+	<script lang="ts" context="module">
+  import { z } from "zod";
+  export const formSchema = z.object({
+    bio: z
+      .string()
+      .min(10, "Bio must be at least 10 characters.")
+      .max(160, "Bio must be at most 160 characters.")
+  });
+  export type FormSchema = typeof formSchema;
+</script>
+ 
+<script lang="ts">
+  import { browser } from "$app/environment";
+  import { page } from "$app/stores";
+  import * as Form from "$lib/components/ui/form";
+  import SuperDebug, {
+    type SuperValidated,
+    type Infer,
+    superForm
+  } from "sveltekit-superforms";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import { Textarea } from "$lib/components/ui/textarea";
+  import { toast } from "svelte-sonner";
+ 
+  let data: SuperValidated<Infer<FormSchema>> = $page.data.textarea;
+  export { data as form };
+ 
+  const form = superForm(data, {
+    validators: zodClient(formSchema),
+    onUpdated: ({ form: f }) => {
+      if (f.valid) {
+        toast.success("You submitted" + JSON.stringify(f.data, null, 2));
+      } else {
+        toast.error("Please fix the errors in the form.");
+      }
+    }
+  });
+ 
+  const { form: formData, enhance } = form;
+</script>
+ 
+<form method="POST" action="?/textarea" class="w-2/3 space-y-6" use:enhance>
+  <Form.Field {form} name="bio">
+    <Form.Control let:attrs>
+      <Form.Label>Bio</Form.Label>
+      <Textarea
+        {...attrs}
+        placeholder="Tell us a little bit about yourself"
+        class="resize-none"
+        bind:value={$formData.bio}
+      />
+      <Form.Description>
+        You can <span>@mention</span> other users and organizations.
+      </Form.Description>
+    </Form.Control>
+    <Form.FieldErrors />
+  </Form.Field>
+  <Form.Button>Submit</Form.Button>
+  {#if browser}
+    <SuperDebug data={$formData} />
+  {/if}
+</form>
+
+
+	  
+
+YRS: Use at end of form to ask customers for any additional comments
+	Tooltip
+https://www.shadcn-svelte.com/docs/components/tooltip
+
+
+	npx shadcn-svelte@latest add tooltip
+	<script lang="ts">
+  import { Button } from "$lib/components/ui/button";
+  import * as Tooltip from "$lib/components/ui/tooltip";
+</script>
+ 
+<Tooltip.Root>
+  <Tooltip.Trigger asChild let:builder>
+    <Button builders={[builder]} variant="outline">Hover</Button>
+  </Tooltip.Trigger>
+  <Tooltip.Content>
+    <p>Add to library</p>
+  </Tooltip.Content>
+</Tooltip.Root>
+
+
+	  
+
+YRS: Potentially useful to add information blocks for customers (e.g., explaining how they can check what kind of electricity connection they might have, etc.)
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+
+
+SHADCN-SVELTE LIBRARY:
+FORMSNAP & SUPERFORMS - GUIDE TO BUILD FORMS WITH FORMSNAP, SVELTEKIT-SUPERFORMS & ZOD
+
+
+Formsnap & Superforms
+Building forms with Formsnap, Superforms, & Zod.
+
+
+Forms are tricky. They are one of the most common things you'll build in a web application, but also one of the most complex.
+
+
+Well-designed HTML forms are:
+
+
+Well-structured and semantically correct.
+Easy to use and navigate (keyboard).
+Accessible with ARIA attributes and proper labels.
+Has support for client and server side validation.
+Well-styled and consistent with the rest of the application.
+In this guide, we will take a look at building forms with formsnap, sveltekit-superforms and zod.
+
+
+Features
+The Form components offered by shadcn-svelte are wrappers around formsnap & sveltekit-superforms which provide a few things:
+
+
+Composable components for building forms.
+Form field components for scoping form state.
+Form validation using Zod or any other validation library supported by Superforms.
+Applies the correct aria attributes to form fields based on states.
+Enables you to easily use various components like Select, RadioGroup, Switch, Checkbox and other form components with forms.
+If you aren't familiar with Superforms & Formsnap, you should check out their documentation first, as this guide assumes you have a basic understanding of how they work together.
+
+
+Anatomy
+<form>
+  <Form.Field>
+    <Form.Control>
+      <Form.Label />
+      <!-- Any Form input component -->
+    </Form.Control>
+    <Form.Description />
+    <Form.FieldErrors />
+  </Form.Field>
+</form>
+Copy
+Example
+<form method="POST" use:enhance>
+  <Form.Field {form} name="email">
+    <Form.Control let:attrs>
+      <Form.Label>Email</Form.Label>
+      <Input {...attrs} bind:value={$formData.email} />
+    </Form.Control>
+    <Form.Description />
+    <Form.FieldErrors />
+  </Form.Field>
+</form>
+Copy
+Installation
+npx shadcn-svelte@latest add form
+Copy
+Usage
+Create a form schema
+Define the shape of your form using a Zod schema. You can read more about using Zod in the Zod documentation. We're going to define it in a file called schema.ts in the same directory as our page component, but you can put it anywhere you like.
+
+
+src/routes/settings/schema.ts
+import { z } from "zod";
+ 
+export const formSchema = z.object({
+  username: z.string().min(2).max(50),
+});
+ 
+export type FormSchema = typeof formSchema;
+Copy
+Return the form from the route's load function
+src/routes/settings/+page.server.ts
+import type { PageServerLoad } from "./$types";
+import { superValidate } from "sveltekit-superforms";
+import { formSchema } from "./schema";
+import { zod } from "sveltekit-superforms/adapters";
+ 
+export const load: PageServerLoad = async () => {
+  return {
+    form: await superValidate(zod(formSchema)),
+  };
+};
+Copy
+Create a form component
+For this example, we'll be passing the form returned from the load function as a prop to this component. To ensure it's typed properly, we'll use the SuperValidated type from sveltekit-superforms, and pass in the type of our form schema.
+
+
+src/routes/settings/settings-form.svelte
+<script lang="ts">
+  import * as Form from "$lib/components/ui/form";
+  import { Input } from "$lib/components/ui/input";
+  import { formSchema, type FormSchema } from "./schema";
+  import {
+    type SuperValidated,
+    type Infer,
+    superForm,
+  } from "sveltekit-superforms";
+  import { zodClient } from "sveltekit-superforms/adapters";
+ 
+  export let data: SuperValidated<Infer<FormSchema>>;
+ 
+  const form = superForm(data, {
+    validators: zodClient(formSchema),
+  });
+ 
+  const { form: formData, enhance } = form;
+</script>
+ 
+<form method="POST" use:enhance>
+  <Form.Field {form} name="username">
+    <Form.Control let:attrs>
+      <Form.Label>Username</Form.Label>
+      <Input {...attrs} bind:value={$formData.username} />
+    </Form.Control>
+    <Form.Description>This is your public display name.</Form.Description>
+    <Form.FieldErrors />
+  </Form.Field>
+  <Form.Button>Submit</Form.Button>
+</form>
+Copy
+The name, id, and all accessibility attributes are applied to the input by spreading the attrs object from the Form.Control component. The Form.Label will automatically be associated with the input using the for attribute, so you don't have to worry about that.
+
+
+Create a page component that uses the form
+We'll pass the form from the data returned from the load function to the form component we created above.
+
+
+src/routes/settings/+page.svelte
+<script lang="ts">
+  import type { PageData } from "./$types";
+  import SettingsForm from "./settings-form.svelte";
+  export let data: PageData;
+</script>
+ 
+<SettingsForm data={data.form} />
+Copy
+Create an Action that handles the form submission
+src/routes/settings/+page.server.ts
+import type { PageServerLoad, Actions } from "./$types";
+import { fail } from "@sveltejs/kit";
+import { superValidate } from "sveltekit-superforms";
+import { zod } from "sveltekit-superforms/adapters";
+import { formSchema } from "./schema";
+ 
+export const load: PageServerLoad = async () => {
+  return {
+    form: await superValidate(zod(formSchema)),
+  };
+};
+ 
+export const actions: Actions = {
+  default: async (event) => {
+    const form = await superValidate(event, zod(formSchema));
+    if (!form.valid) {
+      return fail(400, {
+        form,
+      });
+    }
+    return {
+      form,
+    };
+  },
+};
+Copy
+Done
+That's it. You now have a fully accessible form that is type-safe and has client & server side validation.
+
+
+
+
+SHADCN-SVELTE LIBRARY
+PaneForge - RESIZABLE 
+
+
+Resizable
+Accessible resizable panel groups and layouts with keyboard support.
+
+
+Preview
+Code
+
+
+Style:
+New York
+One
+Two
+Three
+About
+The Resizable component is built on top of PaneForge by Huntabyte. Visit the PaneForge documentation for all the available props and abilities of the Resizable component.
+
+
+Installation
+npx shadcn-svelte@latest add resizable
+Copy
+Manual Installation
+Usage
+<script lang="ts">
+  import * as Resizable from "$lib/components/ui/resizable";
+</script>
+ 
+<Resizable.PaneGroup direction="horizontal">
+  <Resizable.Pane>One</Resizable.Pane>
+  <Resizable.Handle />
+  <Resizable.Pane>Two</Resizable.Pane>
+</Resizable.PaneGroup>
+Copy
+Examples
+Vertical
+Use the direction prop to set the direction of the resizable panels.
+
+
+Preview
+Code
+
+
+Style:
+New York
+Header
+Content
+<script lang="ts">
+  import * as Resizable from "$lib/components/ui/resizable";
+</script>
+ 
+<Resizable.PaneGroup direction="vertical">
+  <Resizable.Pane>One</Resizable.Pane>
+  <Resizable.Handle />
+  <Resizable.Pane>Two</Resizable.Pane>
+</Resizable.PaneGroup>
+Copy
+Handle
+You can set or hide the handle by using the withHandle prop on the ResizableHandle component.
+
+
+Preview
+Code
+
+
+Style:
+New York
+Sidebar
+Content
+<script lang="ts">
+  import * as Resizable from "$lib/components/ui/resizable";
+</script>
+ 
+<Resizable.PaneGroup direction="vertical">
+  <Resizable.Pane>One</Resizable.Pane>
+  <Resizable.Handle withHandle />
+  <Resizable.Pane>Two</Resizable.Pane>
+</Resizable.PaneGroup>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BITS UI  DOCS
+
+
+BITS UI LIBRARY
+	COMPONENT
+	INSTALLATION
+	PAGE SOURCE
+	NOTES
+	Select
+https://www.bits-ui.com/docs/components/select
+
+
+
+
+	
+
+	<script lang="ts">
+  import { Select } from "bits-ui";
+  import { flyAndScale } from "@/utils/index.js";
+  import { Check, Palette, CaretUpDown } from "$icons/index.js";
+ 
+  const themes = [
+    { value: "light-monochrome", label: "Light Monochrome" },
+    { value: "dark-green", label: "Dark Green" },
+    { value: "svelte-orange", label: "Svelte Orange" },
+    { value: "punk-pink", label: "Punk Pink" }
+  ];
+</script>
+ 
+<Select.Root items={themes}>
+  <Select.Trigger
+    class="inline-flex h-input w-[296px] items-center rounded-9px border border-border-input bg-background px-[11px] text-sm transition-colors placeholder:text-foreground-alt/50  focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2 focus:ring-offset-background"
+    aria-label="Select a theme"
+  >
+    <Palette class="mr-[9px] size-6 text-muted-foreground" />
+    <Select.Value class="text-sm" placeholder="Select a theme" />
+    <CaretUpDown class="ml-auto size-6 text-muted-foreground" />
+  </Select.Trigger>
+  <Select.Content
+    class="w-full rounded-xl border border-muted bg-background px-1 py-3 shadow-popover outline-none"
+    transition={flyAndScale}
+    sideOffset={8}
+  >
+    {#each themes as theme}
+      <Select.Item
+        class="flex h-10 w-full select-none items-center rounded-button py-3 pl-5 pr-1.5 text-sm outline-none transition-all duration-75 data-[highlighted]:bg-muted"
+        value={theme.value}
+        label={theme.label}
+      >
+        {theme.label}
+        <Select.ItemIndicator class="ml-auto" asChild={false}>
+          <Check />
+        </Select.ItemIndicator>
+      </Select.Item>
+    {/each}
+  </Select.Content>
+  <Select.Input name="favoriteFruit" />
+</Select.Root>
+
+
+	  
+
+YRS: Select dropdown menu with icon
+	Toolbar
+https://www.bits-ui.com/docs/components/toolbar
+
+
+	
+
+	<script lang="ts">
+  import { Separator, Toolbar } from "bits-ui";
+  import {
+    TextB,
+    TextItalic,
+    TextStrikethrough,
+    TextAlignLeft,
+    TextAlignCenter,
+    TextAlignRight,
+    Sparkle
+  } from "$icons/index.js";
+ 
+  let text: string[] | undefined = ["bold"];
+  let align: string | undefined;
+</script>
+ 
+<Toolbar.Root
+  class="flex h-12 min-w-max items-center justify-center rounded-10px border border-border bg-background-alt px-[4px] py-1 shadow-mini"
+>
+  <Toolbar.Group
+    bind:value={text}
+    type="multiple"
+    class="flex items-center gap-x-0.5"
+  >
+    <Toolbar.GroupItem
+      aria-label="toggle bold"
+      value="bold"
+      class="inline-flex size-10 items-center justify-center rounded-9px bg-background-alt text-foreground/60 transition-all hover:bg-muted active:scale-98 active:bg-dark-10 data-[state=on]:bg-muted data-[state=on]:text-foreground/80 active:data-[state=on]:bg-dark-10"
+    >
+      <TextB class="size-6" />
+    </Toolbar.GroupItem>
+    <Toolbar.GroupItem
+      aria-label="toggle italic"
+      value="italic"
+      class="inline-flex size-10 items-center justify-center rounded-9px bg-background-alt text-foreground/60 transition-all hover:bg-muted active:scale-98 active:bg-dark-10 data-[state=on]:bg-muted data-[state=on]:text-foreground/80 active:data-[state=on]:bg-dark-10"
+    >
+      <TextItalic class="size-6" />
+    </Toolbar.GroupItem>
+    <Toolbar.GroupItem
+      aria-label="toggle strikethrough"
+      value="strikethrough"
+      class="inline-flex size-10 items-center justify-center rounded-9px bg-background-alt text-foreground/60 transition-all hover:bg-muted active:scale-98 active:bg-dark-10 data-[state=on]:bg-muted data-[state=on]:text-foreground/80 active:data-[state=on]:bg-dark-10"
+    >
+      <TextStrikethrough class="size-6" />
+    </Toolbar.GroupItem>
+  </Toolbar.Group>
+ 
+  <Separator.Root class="-my-1 mx-1 w-[1px] self-stretch bg-dark-10" />
+ 
+  <Toolbar.Group
+    bind:value={align}
+    type="single"
+    class="flex items-center gap-x-0.5"
+  >
+    <Toolbar.GroupItem
+      aria-label="align left"
+      value="left"
+      class="inline-flex size-10 items-center justify-center rounded-9px bg-background-alt text-foreground/60 transition-all hover:bg-muted active:scale-98 active:bg-dark-10 data-[state=on]:bg-muted data-[state=on]:text-foreground/80 active:data-[state=on]:bg-dark-10"
+    >
+      <TextAlignLeft class="size-6" />
+    </Toolbar.GroupItem>
+    <Toolbar.GroupItem
+      aria-label="align center"
+      value="center"
+      class="inline-flex size-10 items-center justify-center rounded-9px bg-background-alt text-foreground/60 transition-all hover:bg-muted active:scale-98 active:bg-dark-10 data-[state=on]:bg-muted data-[state=on]:text-foreground/80 active:data-[state=on]:bg-dark-10"
+    >
+      <TextAlignCenter class="size-6" />
+    </Toolbar.GroupItem>
+    <Toolbar.GroupItem
+      aria-label="align right"
+      value="right"
+      class="inline-flex size-10 items-center justify-center rounded-9px bg-background-alt text-foreground/60 transition-all hover:bg-muted active:scale-98 active:bg-dark-10 data-[state=on]:bg-muted data-[state=on]:text-foreground/80 active:data-[state=on]:bg-dark-10"
+    >
+      <TextAlignRight class="size-6" />
+    </Toolbar.GroupItem>
+  </Toolbar.Group>
+ 
+  <Separator.Root class="-my-1 mx-1 w-[1px] self-stretch bg-dark-10" />
+ 
+  <div class="flex items-center">
+    <Toolbar.Button
+      class="inline-flex items-center justify-center rounded-9px px-3 py-2 text-sm  font-medium text-foreground/80 transition-all hover:bg-muted active:scale-98 active:bg-dark-10"
+    >
+      <Sparkle class="mr-2 size-6" />
+      <span> Ask AI </span>
+    </Toolbar.Button>
+  </div>
+</Toolbar.Root>
+
+
+	  
+
+YRS: Potentially useful to create drawing toolbar
